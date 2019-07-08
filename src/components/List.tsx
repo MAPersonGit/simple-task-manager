@@ -1,13 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { EditTask } from './EditTask'
+import { Link } from "react-router-dom";
+import {Header} from './header';
+import { DeleteButton } from './DeleteButton';
+import {Popup} from './popup';
 
-
-export function List({ tasks, match, onClick }: any) {
-    console.log(match);
+export function List({ tasks, removeHandler }: any) {
+    
 
     return (
         <div>
+            <Header title={'Список задач'}
+                element={<Popup/>} />
             <table>
                 <tbody>
                     {tasks.map((task: any) => (
@@ -15,8 +18,8 @@ export function List({ tasks, match, onClick }: any) {
                             <td>{task.id}</td>
                             <td>{task.title}</td>
                             <td>
-                                <button onClick={() => onClick(task.id, 'DELETE')}>удалить</button>
-                                <Link to={`/${task.id}`}>редактировать</Link>
+                                <DeleteButton clickHandler={removeHandler} id={task.id}/>
+                                <Link to={`/${task.id}`}><button>редактировать</button></Link>
                             </td>
                         </tr>
                     ))}

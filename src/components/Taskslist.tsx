@@ -1,17 +1,23 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {List} from './List';
-import {EditTask} from './EditTask'
-
-import {task} from '../types';
+import { List } from './List';
+import { EditTask } from './EditTask'
+import { task } from '../types';
 
 const getDataUrl = 'https://test.megapolis-it.ru/api/list';
 
+const defaultParams = {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
 export function TasksList() {
-    const [tasks, setTasks] = useState( [{}] );
+
+    const [tasks, setTasks] = useState([{}]);
     const [task, setTask] = useState('');
     const [loading, setLoading] = useState(true);
-    const [isOpen, setModalState] = useState(false);
+    const [isOpened, setIsOpened] = useState(false);
 
     async function loadTasks() {
         return await fetch(getDataUrl).then(response => response.json()).then(json => {
@@ -20,52 +26,65 @@ export function TasksList() {
         });
     }
 
+    async function sendRequest(id = '', requestParams = defaultParams, firstLoad: false) {
+        const res = await fetch(`https://test.megapolis-it.ru/api/list/${id}`, requestParams).then(response => response.json())
 
-    function submitForm(event:any) {
+        if (res.data.success === true) {
+            console.log(res.data);
+        } else {
+            console.error(res)
+        }
+
+    }
+
+
+    function submitForm(event: any) {
         event.preventDefault();
-        
+
         fetch('https://test.megapolis-it.ru/api/list', {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({title: task})
-            
-        }).then(response => response.json()).then(data => data.success === true ? addTask(data.id) : console.log(data.error));
-    }
+            },
+            body: JSON.stringify({ title: task })
 
-    function addTask(id:number) {
-       setTasks( tasks.concat({id: id, title: task}) )
-    }
-
-    function inputHandler(e:any){
-        setTask(e.target.value);
-    }
-
-    function changeTask(id:string, actionType:string) {
-        fetch(`https://test.megapolis-it.ru/api/list/${id}`, {
-            method: actionType,
         }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
     }
 
-    useEffect( () => {
+
+    function inputHandler(e: any) {
+        setTask(e.target.value);
+    }
+
+    function changeTask(newTitle: string, id:number) {
+        fetch(`https://test.megapolis-it.ru/api/list/${id}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({title: newTitle})
+        }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
+    }
+
+    function removeTask(id: number) {
+        fetch(`https://test.megapolis-it.ru/api/list/${id}`, {
+            method: "DELETE"
+        }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
+    }
+
+
+    useEffect(() => {
         loadTasks();
     }, [])
 
     return loading ? <span>please wait</span> : (
         <Router>
-        <div>
-            <h1>Список задач</h1>
-            
-            <form onSubmit={submitForm}>
-            <label htmlFor="taskInput">Краткое описание</label>
-            <input id="taskInput" type="text" onChange={inputHandler}/>
-            <button type="submit">создать</button>
-            </form>
-            <Route path="/" exact render={(props) => <List {...props} tasks={tasks} onClick={changeTask}/> } />
-            <Route path="/:taskID" render={(props) => <EditTask {...props} tasks={tasks} onClick={changeTask}/> } />
-        </div>
+            <div>
+                <Route path="/" exact render={(props) => <List {...props} tasks={tasks} removeHandler={removeTask} />} />
+                <Route path="/:taskID" render={(props) => <EditTask {...props} tasks={tasks} onClick={changeTask} removeHandler={removeTask} />} />
+            </div>
         </Router>
     )
 }
