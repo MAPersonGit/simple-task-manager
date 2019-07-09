@@ -4,13 +4,22 @@ import {Header} from './header';
 import { DeleteButton } from './DeleteButton';
 import {Popup} from './popup';
 
-export function List({ tasks, removeHandler }: any) {
+interface Iprops {
+    tasks: any,
+    removeHandler: () => void,
+    callback: () => void
+}
+
+export const List:React.FC<Iprops> = ({ tasks, removeHandler, callback}) => {
     
+    const headerElement = (
+        <Popup callback={callback}/>
+    )
 
     return (
         <div>
             <Header title={'Список задач'}
-                element={<Popup/>} />
+                element={headerElement} />
             <table>
                 <tbody>
                     {tasks.map((task: any) => (

@@ -8,6 +8,13 @@ export function EditTask({ tasks, onClick, match, removeHandler }: any) {
     const task = tasks.find((task: task) => task.id == match.params.taskID)
     const [formValue, setFormValue] = useState(task.title)
     const [btnText, setBtnText] = useState('вернуться к списку')
+    
+    const headerElement = (
+        <Link to='/'>
+            <DeleteButton clickHandler={removeHandler} id={task.id} />
+        </Link>
+    )
+
 
 
     function inputHandler(e: React.FormEvent<HTMLInputElement>): void {
@@ -25,10 +32,7 @@ export function EditTask({ tasks, onClick, match, removeHandler }: any) {
 
     return (
         <div>
-            <Header title={`Задача №${task.id}`}
-                element={
-                    <DeleteButton clickHandler={removeHandler} id={task.id} />
-                } />
+            <Header title={`Задача №${task.id}`} element={headerElement} />
             <form>
                 <label htmlFor="taskInput">Краткое описание</label>
                 <input id="taskInput" type="text" value={formValue} onChange={inputHandler} />
