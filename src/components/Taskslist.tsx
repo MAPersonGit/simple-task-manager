@@ -6,15 +6,11 @@ import { task } from '../types';
 
 const getDataUrl = 'https://test.megapolis-it.ru/api/list';
 
-const defaultParams = {
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
+
 
 export function TasksList() {
 
-    const [tasks, setTasks] = useState([{}]);
+    const [tasks, setTasks] = useState([{title: 'sample', id: 0}]);
     const [task, setTask] = useState('');
     const [loading, setLoading] = useState(true);
     const [isOpened, setIsOpened] = useState(false);
@@ -25,18 +21,6 @@ export function TasksList() {
             setLoading(false);
         });
     }
-
-    async function sendRequest(id = '', requestParams = defaultParams, firstLoad: false) {
-        const res = await fetch(`https://test.megapolis-it.ru/api/list/${id}`, requestParams).then(response => response.json())
-
-        if (res.data.success === true) {
-            console.log(res.data);
-        } else {
-            console.error(res)
-        }
-
-    }
-
 
     function submitForm(event: any) {
         event.preventDefault();
@@ -52,11 +36,6 @@ export function TasksList() {
         }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
     }
 
-
-    function inputHandler(e: any) {
-        setTask(e.target.value);
-    }
-
     function changeTask(newTitle: string, id:number) {
         fetch(`https://test.megapolis-it.ru/api/list/${id}`, {
             method: 'POST',
@@ -65,13 +44,13 @@ export function TasksList() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({title: newTitle})
-        }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
+        }).then(response => response.json()).then(data => data.success ? loadTasks() : console.log(data.error));
     }
 
     function removeTask(id: number) {
         fetch(`https://test.megapolis-it.ru/api/list/${id}`, {
             method: "DELETE"
-        }).then(response => response.json()).then(data => data.success === true ? loadTasks() : console.log(data.error));
+        }).then(response => response.json()).then(data => data.success ? loadTasks() : console.log(data.error));
     }
 
 
@@ -82,8 +61,8 @@ export function TasksList() {
     return loading ? <span>please wait</span> : (
         <Router>
             <div>
-                <Route path="/" exact render={(props) => <List {...props} tasks={tasks} removeHandler={removeTask} />} />
-                <Route path="/:taskID" render={(props) => <EditTask {...props} tasks={tasks} onClick={changeTask} removeHandler={removeTask} />} />
+                <Route path="/" exact render={() => <List tasks={tasks} removeHandler={removeTask} />} />
+                <Route path="/:taskID" render={({match}) => <EditTask match={match} tasks={tasks} onClick={changeTask} removeHandler={removeTask} />} />
             </div>
         </Router>
     )

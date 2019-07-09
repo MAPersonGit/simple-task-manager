@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useCallback } from 'react';
+import { Link, RouteComponentProps } from "react-router-dom";
 import { task } from '../types';
 import { Header } from './header';
 import { DeleteButton } from './DeleteButton';
+import {CommitTaskButton} from './CommitTaskButton';
 
-export function EditTask({ tasks, onClick, match, removeHandler }: any) {
-    const task = tasks.find((task: task) => task.id == match.params.taskID)
+
+interface MatchParams {
+    name: string;
+    taskID: string
+}
+
+interface EditTaskProps extends RouteComponentProps<MatchParams> {
+    tasks: Array<task>, 
+    onClick: (title: string, id: number) => void,
+    removeHandler: (id: number) => void 
+}
+
+export const EditTask:React.FC<EditTaskProps> = ({ tasks, onClick, match, removeHandler }) => {
+    const {params} = match;
+    const task = tasks.find((task: task) => task.id == Number(params.taskID)) || {title: 'sample', id: 0}
     const [formValue, setFormValue] = useState(task.title)
-    const [btnText, setBtnText] = useState('вернуться к списку')
+    const [taskChanged, setTaskChanged] = useState(false);
     
     const headerElement = (
         <Link to='/'>
@@ -16,17 +30,10 @@ export function EditTask({ tasks, onClick, match, removeHandler }: any) {
     )
 
 
-
-    function inputHandler(e: React.FormEvent<HTMLInputElement>): void {
-        const inputValue = e.currentTarget.value;
-
-        setFormValue(inputValue);
-
-        if (formValue !== task.title) {
-            setBtnText('сохранить');
-        } else {
-            setBtnText('вернуться к списку');
-        }
+    function inputHandler({currentTarget}: React.FormEvent<HTMLInputElement>): void {
+        const {value} = currentTarget;
+        setFormValue(value);
+        setTaskChanged(value !== task.title);
     }
 
 
@@ -37,8 +44,9 @@ export function EditTask({ tasks, onClick, match, removeHandler }: any) {
                 <label htmlFor="taskInput">Краткое описание</label>
                 <input id="taskInput" type="text" value={formValue} onChange={inputHandler} />
             </form>
+
             <Link to='/'>
-                <button onClick={() => onClick(formValue, task.id)}>{btnText}</button>
+                <CommitTaskButton changed={taskChanged} clickHandler={onClick} id={task.id} title={formValue}/>
             </Link>
         </div>
     )

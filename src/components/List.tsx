@@ -6,20 +6,14 @@ import {Popup} from './popup';
 
 interface Iprops {
     tasks: any,
-    removeHandler: () => void,
-    callback: () => void
+    removeHandler: (id:number) => void,
 }
 
-export const List:React.FC<Iprops> = ({ tasks, removeHandler, callback}) => {
-    
-    const headerElement = (
-        <Popup callback={callback}/>
-    )
+export const List:React.FC<Iprops> = ({ tasks, removeHandler}) => {
 
     return (
         <div>
-            <Header title={'Список задач'}
-                element={headerElement} />
+            <Header title='Список задач' element={<Popup/>} />
             <table>
                 <tbody>
                     {tasks.map((task: any) => (
