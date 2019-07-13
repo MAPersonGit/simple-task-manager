@@ -45,7 +45,7 @@ export function taskListApp(state: any = initialState, action: AnyAction) {
       };
     case RESPONSE_ERROR:
       return {
-        state,
+        ...state,
         ...action.payload
       };
     default:

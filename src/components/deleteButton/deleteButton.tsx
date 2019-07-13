@@ -8,12 +8,12 @@ interface PropsType {
 }
 
 export const DeleteButton = ({ clickHandler, id }: PropsType): JSX.Element => {
-  const handleClick = ({target}: any): void => {
-    clickHandler(target.dataset.id);
-  };
+  // const handleClick = ({target}: any): void => {
+  //   clickHandler(target.dataset.id);
+  // };
 
   return (
-    <button data-id={id} onClick={handleClick}>
+    <button data-id={id} onClick={() => clickHandler(id)}>
       удалить
     </button>
   );

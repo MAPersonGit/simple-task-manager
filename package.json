@@ -44,5 +44,10 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/classnames": "^2.2.9",
+    "@types/history": "^4.7.2",
+    "classnames": "^2.2.6",
+    "prettier": "^1.18.2"
+  }
 }

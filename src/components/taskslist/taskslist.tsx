@@ -20,14 +20,15 @@ export function TasksList({ getTasks, appData }: any) {
         <Route
           path="/"
           exact
-          render={() => (
-            <ListConnected tasks={appData.data}/>
+          render={({history}) => (
+            <ListConnected history={history} tasks={appData.data}/>
           )}
         />
         <Route
           path="/:taskID"
-          render={({ match }) => (
+          render={({ match, history }) => (
             <EditTaskConnected
+              history={history}
               match={match}
               tasks={appData.data}
             />

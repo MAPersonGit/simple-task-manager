@@ -7,7 +7,6 @@ import { App } from "./components/app";
 import "./index.css";
 import "./normalize.css";
 
-
 const { store } = configureStore();
 
 render(

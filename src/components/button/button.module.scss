@@ -1,0 +1,30 @@
+$buttons-map: (
+  red: #ff0000,
+  green: #39b54a,
+  blue: #0071bc
+);
+
+.button {
+  display: inline-block;
+  padding: 9px 16px 10px 16px;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  width: 100%;
+}
+
+@each $cls, $color in $buttons-map {
+  &.#{$cls} {
+    background-color: transparent;
+    transition: 0.3s ease background-color, 0.3s ease color;
+    border-color: #{$color};
+
+    &:hover {
+      color: #FFFFFF;
+      background-color: #{$color};
+    }
+  }
+}

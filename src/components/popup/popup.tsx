@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { actionCreateTask } from "../../actions/actions";
 import { connect } from "react-redux";
-
+import classnames from "classnames";
+import { Button } from "../button/button";
 import s from "./popup.module.scss";
 
 interface PopupProps {
@@ -35,10 +36,10 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
     }
   }
 
-  // const createBtnClass = classnames('button', 'button-hovered', 'green', s.closeButton);
-
   return !isVisible ? (
-    <button onClick={() => setVisible(!isVisible)}>add</button>
+    <Button name={"green"} onClick={() => setVisible(!isVisible)}>
+      add
+    </Button>
   ) : (
     <div className={s.popup}>
       <div className={s.popupContent}>
@@ -46,7 +47,9 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
           onClick={() => setVisible(!isVisible)}
           className={s.closeButton}
         />
-        <label htmlFor="taskInput" className={s.label}>Краткое описание</label>
+        <label htmlFor="taskInput" className={s.label}>
+          Краткое описание
+        </label>
         <input
           id="taskInput"
           type="text"
@@ -54,7 +57,9 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
           onChange={e => inputHandler(e)}
         />
         {error && <p className={s.error}>{error}</p>}
-        <button onClick={() => create()} className={'button button-hovered green'}>создать</button>
+        <Button name="blue" onClick={() => create()}>
+          создать
+        </Button>
       </div>
     </div>
   );
