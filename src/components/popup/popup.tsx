@@ -62,7 +62,6 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
         <div className={s.popupFooter}>
           <Button
             name="green"
-            names={[s.popupClass, s.class]}
             onClick={() => create()}
           >
             создать
