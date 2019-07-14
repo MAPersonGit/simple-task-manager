@@ -13,11 +13,12 @@ $buttons-map: (
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
-  width: 100%;
+  max-width:  100%;
 }
 
 @each $cls, $color in $buttons-map {
   &.#{$cls} {
+    min-width: 148px;
     background-color: transparent;
     transition: 0.3s ease background-color, 0.3s ease color;
     border-color: #{$color};
@@ -27,4 +28,20 @@ $buttons-map: (
       background-color: #{$color};
     }
   }
+}
+
+.popup {
+  text-align: right;
+}
+
+.buttonEdit {
+  width: 30px;
+  height: 30px;
+  background: url('./svg/pencil.svg') no-repeat center;
+}
+
+.buttonRemove {
+  width: 30px;
+  height: 30px;
+  background: url('./svg/trashcan.svg') no-repeat center;
 }

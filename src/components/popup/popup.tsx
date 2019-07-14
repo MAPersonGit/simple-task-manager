@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { actionCreateTask } from "../../actions/actions";
 import { connect } from "react-redux";
-import classnames from "classnames";
 import { Button } from "../button/button";
 import s from "./popup.module.scss";
 
@@ -21,24 +20,27 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
     setFormValue(value);
   }
 
-  function close() {
-    setFormValue("");
-    setError("");
-    setVisible(false);
-  }
 
   function create() {
     if (formValue) {
       createTask(formValue);
-      close();
+      setVisible(false);
     } else {
       setError("Заголовок не может быть пустым");
     }
   }
 
+  useEffect(() => {
+
+    return () => {
+      setFormValue("");
+      setError("");
+    }
+  }, [isVisible])
+
   return !isVisible ? (
     <Button name={"green"} onClick={() => setVisible(!isVisible)}>
-      add
+      Добавить
     </Button>
   ) : (
     <div className={s.popup}>
@@ -56,10 +58,16 @@ export const Popup = ({ createTask }: PopupProps): JSX.Element | null => {
           className={s.field}
           onChange={e => inputHandler(e)}
         />
-        {error && <p className={s.error}>{error}</p>}
-        <Button name="blue" onClick={() => create()}>
-          создать
-        </Button>
+        <p className={s.error}>{error}</p>
+        <div className={s.popupFooter}>
+          <Button
+            name="green"
+            names={[s.popupClass, s.class]}
+            onClick={() => create()}
+          >
+            создать
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -47,7 +47,9 @@
   "devDependencies": {
     "@types/classnames": "^2.2.9",
     "@types/history": "^4.7.2",
+    "@types/webfontloader": "^1.6.29",
     "classnames": "^2.2.6",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "webfontloader": "^1.6.28"
   }
 }

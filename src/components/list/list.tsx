@@ -1,12 +1,12 @@
 import React from "react";
 import { Header } from "../header/header";
-import { DeleteButton } from "../deleteButton/deleteButton";
 import { PopupConnected } from "../popup/popup";
-import { taskList, task } from "../../types/responseTypes";
+import { task } from "../../types/responseTypes";
 import { actionDeleteTask } from "../../actions/actions";
 import { connect } from "react-redux";
 import { Button } from "../button/button";
 import { History } from "history";
+import classNames from "classnames";
 import s from "./list.module.scss";
 
 interface PropsType {
@@ -24,24 +24,18 @@ export const List = ({
     <Header title="Список задач">
       <PopupConnected />
     </Header>
-    <table>
-      <tbody>
+    <ul className={s.tasksList}> 
         {tasks.map((task: task) => (
-          <tr key={task.id}>
-            <td>{task.id}</td>
-            <td>{task.title}</td>
-            <td>
-              <Button name="red" onClick={() => removeTask(task.id)}>
-                удалить
-              </Button>
-              <Button name="green" onClick={() => history.push(`/${task.id}`)}>
-                редактировать
-              </Button>
-            </td>
-          </tr>
+          <li key={task.id} className={s.row}>
+            <p className={classNames(s.title, s.column)}>Задача № {task.id}</p>
+            <p className={classNames(s.description, s.column)}>{task.title}</p>
+            <p className={classNames(s.buttonBox, s.buttonColumn)}>
+            <Button name="buttonEdit" onClick={() => history.push(`/${task.id}`)}/>
+            <Button name="buttonRemove" onClick={() => removeTask(task.id)}/>
+            </p>
+            </li>
         ))}
-      </tbody>
-    </table>
+    </ul>
   </div>
 );
 

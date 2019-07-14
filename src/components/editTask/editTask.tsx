@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { Link, match } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { match } from "react-router-dom";
 import { task } from "../../types";
 import { Header } from "../header/header";
-import { DeleteButton } from "../deleteButton/deleteButton";
-import { CommitTaskButton } from "../commitTaskButton/commitTaskButton";
 import { connect } from "react-redux";
 import { actionEditTask, actionDeleteTask } from "../../actions/actions";
 import { Button } from "../button/button";
@@ -31,11 +29,11 @@ export const EditTask: React.FC<EditTaskProps> = ({
   removeTask
 }) => {
   const { params } = match;
-  const task = tasks.find(
-    (task: task) => task.id === Number(params.taskID)
-  ) || { title: "sample", id: 0 };
+  const [task, setTask] = useState({ title: "", id: 0 });
   const [formValue, setFormValue] = useState(task.title);
   const [taskChanged, setTaskChanged] = useState(false);
+  const [error, setError] = useState("");
+
 
   function inputHandler({
     currentTarget
@@ -51,35 +49,55 @@ export const EditTask: React.FC<EditTaskProps> = ({
   }
 
   function clickHandler() {
-    if (taskChanged) {
+    if (taskChanged && formValue) {
       editTask(task.id, formValue);
+    } else {
+      setError("Заголовок не может быть пустым")
     }
 
-    history.push("/");
-
-    // if (!formValue) {
-    //   window.location.href = '/'
-    // } else {
-    //   history.push("/");
-    // }
+    if (formValue) {
+      history.push("/");
+    }
   }
+
+  useEffect(() => {
+    const task = tasks.find(
+      (task: task) => task.id === Number(params.taskID)
+    );
+
+    if (task) {
+      setTask(task);
+      setFormValue(task.title);
+    }
+
+  }, [tasks])
 
   return (
     <div>
       <Header title={`Задача №${task.id}`}>
-        <Button name="red" onClick={() => deleteTaskHandler(task.id)} />
+        <Button name="red" onClick={() => deleteTaskHandler(task.id)}>
+          удалить
+        </Button>
       </Header>
-      <label htmlFor="taskInput">Краткое описание</label>
-      <input
-        id="taskInput"
-        type="text"
-        value={formValue}
-        onChange={inputHandler}
-      />
 
-      <Button name="blue" onClick={() => clickHandler()}>
-        {taskChanged ? "сохранить" : "вернуться к списку"}
-      </Button>
+      <div className={s.editBox}>
+        <label htmlFor="taskInput" className={s.label}>
+          Краткое описание
+        </label>
+        <input
+          id="taskInput"
+          className={s.field}
+          type="text"
+          value={formValue}
+          onChange={inputHandler}
+        />
+        <p className={s.error}>{error}</p>
+        <div className={s.buttonBox}>
+        <Button name="blue" onClick={() => clickHandler()}>
+          {taskChanged ? "сохранить" : "вернуться к списку"}
+        </Button>
+        </div>
+      </div>
     </div>
   );
 };

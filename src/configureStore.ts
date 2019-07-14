@@ -4,10 +4,6 @@ import thunk from 'redux-thunk';
 import {taskListApp, initialState} from './reducers/taskReducers';
 
 
-const persistConfig = {
-    key: 'portfolio',
-    whitelist: ['user'],
-}
 
 declare global {
     interface Window { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any }
@@ -15,8 +11,6 @@ declare global {
 
 
 export default function configureStore(): any {
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    const middleware = applyMiddleware(thunk);
 
     const store = createStore(
         taskListApp,

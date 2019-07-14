@@ -1,4 +1,5 @@
-import { AnyAction, Store} from "redux";
+import { AnyAction } from "redux";
+import { task } from "../types/responseTypes";
 import {
   LOAD_TASKS,
   CREATE_TASK,
@@ -6,7 +7,6 @@ import {
   RESPONSE_ERROR,
   DELETE_TASK
 } from "../actions/actionTypes";
-import { task } from "../types/responseTypes";
 
 export const initialState = {
   data: [],

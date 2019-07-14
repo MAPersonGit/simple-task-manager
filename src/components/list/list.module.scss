@@ -1,0 +1,38 @@
+.tasksList {
+    border: 1px solid #e6e6e6;
+    border-bottom: none;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    border-bottom: 1px solid #e6e6e6;
+    align-items: center;
+}
+
+.column {
+    padding: 12px 20px 14px 20px;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.buttonColumn {
+    padding: 0 20px; 
+}
+
+.title {
+    flex: 0 0 auto;
+    font-weight: bold;
+}
+
+.description {
+    flex: 1 0 60%;
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+}
+
+.buttonBox {
+    flex: 0 0 auto;
+    display: flex;
+}
+
