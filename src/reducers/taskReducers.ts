@@ -23,25 +23,31 @@ export function taskListApp(state: any = initialState, action: AnyAction) {
       };
     case CREATE_TASK:
       return {
-        ...action.payload,
         data: [
           ...state.data,
           { id: action.payload.id, title: action.payload.title }
-        ]
+        ],
+        length: state.length + 1,
+        success: action.payload.success,
+        error: action.payload.error,
       };
     case EDIT_TASK:
       return {
-        ...action.payload,
+        ...state,
         data: state.data.map((task: task) =>
           task.id === action.payload.id
             ? { ...task, title: action.payload.title }
             : task
-        )
+        ),
+        success: action.payload.success,
+        error: action.payload.error,
       };
     case DELETE_TASK:
       return {
-        ...action.payload,
-        data: state.data.filter((task: task) => task.id !== Number(action.payload.id))
+        data: state.data.filter((task: task) => task.id !== Number(action.payload.id)),
+        length: state.length - 1,
+        success: action.payload.success,
+        error: action.payload.error,
       };
     case RESPONSE_ERROR:
       return {
