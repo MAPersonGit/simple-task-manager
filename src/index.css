@@ -1,0 +1,8 @@
+@import './styleguide/styles.css';
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-concretesolid);
+  font-family: 'Open Sans', sans-serif;
+}

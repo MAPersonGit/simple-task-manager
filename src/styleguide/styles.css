@@ -1,0 +1,9 @@
+:root {
+    --font-tahoma: 'Tahoma', sans-serif;
+    --font-regular: 400;
+    --font-bold: 700;
+    --font-extra-bold: 900;
+    --color-white: #fff;
+    --color-black: #000;
+    --color-concretesolid: #f2f2f2;
+  }
